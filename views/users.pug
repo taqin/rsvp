@@ -8,13 +8,18 @@ block content
     <button class="btn btn-success" type="button">Export to Excel</button>
   </form>
   </nav>
-  <table class="table">
+  <table class="table table-bordered" style="font-size:11px;">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Email</th>
         <th scope="col">Country</th>
+        <th scope="col">First Meeting</th>
+        <th scope="col">Personal Meeting</th>
+        <th scope="col">First Day</th>
+        <th scope="col">Second Day</th>
+        <th scope="col">Registered On</th>
       </tr>
     </thead>
     <tbody>      
@@ -24,6 +29,11 @@ block content
         <td>#{attendee.name}</td>
         <td>#{attendee.email}</td>
         <td>#{attendee.country}</td>
+        <td>#{attendee.firstMeeting}</td>
+        <td>#{attendee.personalMeeting}</td>
+        <td>#{attendee.firstEvent}</td>
+        <td>#{attendee.secondEvent}</td>
+        <td>#{attendee.updated}</td>
       </tr>     
       //- else
 
