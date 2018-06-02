@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1= title
+
+  <nav class="navbar navbar-dark bg-dark">
+  <form class="form-inline">
+    <button class="btn btn-success" type="button">Export to Excel</button>
+  </form>
+  </nav>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Country</th>
+      </tr>
+    </thead>
+    <tbody>      
+    each attendee, index in item
+      <tr>
+        <th scope="row">#{index+1}</th>
+        <td>#{attendee.name}</td>
+        <td>#{attendee.email}</td>
+        <td>#{attendee.country}</td>
+      </tr>     
+      //- else
+
+    </tbody>
+  </table>
