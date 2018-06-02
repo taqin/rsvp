@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const csv = require('csv-express');
 
 require('mongoose-type-email');
 
@@ -106,6 +107,28 @@ app.get('/users', function (req, res, next) {
     }
   }).catch(function (error) {
     res.status(500).send('Internal Server Error');
+  });
+
+});
+
+app.get('/export', function (req, res, next) {
+
+  var filename = "rsvp.csv";
+
+  var dataArray;
+
+  Singapore.find().lean().exec({}, function (err, attendees) {
+
+    if (err) res.send(err);
+
+    res.statusCode = 200;
+
+    res.setHeader('Content-Type', 'text/csv');
+
+    res.setHeader("Content-Disposition", 'attachment; filename=' + filename);
+
+    res.csv(attendees, true);
+
   });
 
 });
