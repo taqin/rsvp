@@ -23,11 +23,11 @@ const rsvpSchema = mongoose.Schema({
   name: { type: String, default: 'Nameless' },
   email: mongoose.SchemaTypes.Email,
   country: String,
-  firstMeeting: { type: Boolean, default: false },
-  personalMeeting: { type: Boolean, default: false },
+  firstMeeting: { type: String, default: 'No' },
+  personalMeeting: { type: String, default: 'No' },
   eventCode: String,
-  firstEvent: { type: Boolean, default: false },
-  secondEvent: { type: Boolean, default: false },
+  firstEvent: { type: String, default: 'No' },
+  secondEvent: { type: String, default: 'No' },
   isContactPerson: Boolean,
   contactPerson: String,
   rsvpCode: String
@@ -61,51 +61,41 @@ app.get('/', function (req, res, next) {
 });
 
 /* POST Registration Details */
-app.post('/register', function (req, res) {
+app.post('/register', function (req, res, next) {
 
-  const eachAttendee = [req.body.name];
+  const eachAttendee = req.body.name;
   const eventLocation = req.body.event;
 
-  console.log(eventLocation);
-  console.log(req.body);
+  let numberReg = eachAttendee.length;
 
-  eachAttendee.forEach( async (item) => {
-    const newRSVP = new Attendee({
-      name: req.body.name,
-      email: req.body.email,
-      country: req.body.country,
-      firstMeeting: req.body.firstMeeting,
-      personalMeeting: req.body.personalMeeting,
-      eventCode: req.body.event,
-      firstEvent: req.body.firstEvent,
-      secondEvent: req.body.secondEvent,
-      // isContactPerson: req.body.email
-      contactPerson: req.body.email
-      // rsvpCode: req.body.rsvpCode
+  console.log('Number of Names: ' + numberReg);
+  // res.send(eachAttendee);
+  
+  eachAttendee.forEach(function(item, index) {
+      const newRSVP = new Attendee({
+        name: item,
+        email: req.body.email,
+        country: req.body.country,
+        firstMeeting: req.body.firstMeeting[index],
+        personalMeeting: req.body.personalMeeting[index],
+        eventCode: req.body.event,
+        firstEvent: req.body.firstEvent[index],
+        secondEvent: req.body.secondEvent[index],
+        contactPerson: req.body.email
+      });
+      newRSVP.save().then(person => {
+      console.log('Registered', req.body.name);
+      res.send(person);
+    }, e => {
+      console.log('Unable to Register');
+      res.status(500).send('Something broke!');
+      res.status(404).send('WTF Not found!');
+      res.send(e);
     });
-    try {
-      let rsvp = await newRSVP.save();
-      res.status(201).send({ response: 'Registered : ' + req.body.name });
-
-    } catch (err) {
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(409).send(new MyError('Duplicate key', [err.message]));
-      }
-      res.status(500).send(err);
-    }
-
-    // console.log(newRSVP);
-    // newRSVP.save().then(person => {
-    //   console.log('Registered', person);
-    //   res.send(person);
-    // }, e => {
-    //   console.log('Unable to Register');
-    //   res.status(500).send('Something broke!');
-    //   res.status(404).send('Not found!');
-    //   res.send(e);
-    // });
   });
+  
 });
+
 /* View Registrant */
 app.get('/users', function (req, res, next) {
   Attendee.find().then(item => {
