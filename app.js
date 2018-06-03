@@ -34,12 +34,13 @@ const rsvpSchema = mongoose.Schema({
 });
 
 // Define the Models
-const Malaysia = mongoose.model('Malaysia', rsvpSchema);
-const Indonesia = mongoose.model('Indonesia', rsvpSchema);
-const Singapore = mongoose.model('Singapore', rsvpSchema);
+// const Malaysia = mongoose.model('Malaysia', rsvpSchema);
+// const Indonesia = mongoose.model('Indonesia', rsvpSchema);
+const Attendee = mongoose.model('Attendee', rsvpSchema);
 
 // Power up the Express server
 const app = express();
+
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -58,8 +59,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function (req, res, next) {
   res.render('index', { title: 'Expressing' });
 });
+
 /* POST Registration Details */
-app.post('/register', function (req, res, next) {
+app.post('/register', function (req, res) {
 
   const eachAttendee = [req.body.name];
   const eventLocation = req.body.event;
@@ -67,34 +69,46 @@ app.post('/register', function (req, res, next) {
   console.log(eventLocation);
   console.log(req.body);
 
-  eachAttendee.forEach(function (item) {
-    const newRSVP = new Singapore({
+  eachAttendee.forEach( async (item) => {
+    const newRSVP = new Attendee({
       name: req.body.name,
       email: req.body.email,
       country: req.body.country,
       firstMeeting: req.body.firstMeeting,
-      personalMeeting: req.body.secondMeeting,
-      // eventCode: req.body.eventCode,
+      personalMeeting: req.body.personalMeeting,
+      eventCode: req.body.event,
       firstEvent: req.body.firstEvent,
-      secondEvent: req.body.secondEvent
-      // isContactPerson: req.body.isContactPerson,
-      // contactPerson: req.body.contactPerson,
+      secondEvent: req.body.secondEvent,
+      // isContactPerson: req.body.email
+      contactPerson: req.body.email
       // rsvpCode: req.body.rsvpCode
     });
-    newRSVP.save().then(person => {
-        console.log('Registered', person);
-        res.send(person);
-      }, e => {
-        console.log('Unable to Register');
-        res.status(500).send('Something broke!');
-        res.status(404).send('WTF Not found!');
-        res.send(e);
-      });
+    try {
+      let rsvp = await newRSVP.save();
+      res.status(201).send({ response: 'Registered : ' + req.body.name });
+
+    } catch (err) {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        res.status(409).send(new MyError('Duplicate key', [err.message]));
+      }
+      res.status(500).send(err);
+    }
+
+    // console.log(newRSVP);
+    // newRSVP.save().then(person => {
+    //   console.log('Registered', person);
+    //   res.send(person);
+    // }, e => {
+    //   console.log('Unable to Register');
+    //   res.status(500).send('Something broke!');
+    //   res.status(404).send('Not found!');
+    //   res.send(e);
+    // });
   });
 });
 /* View Registrant */
 app.get('/users', function (req, res, next) {
-  Singapore.find().then(item => {
+  Attendee.find().then(item => {
     if (item !== null) {
       console.log(item);
       res.render('users', 
@@ -117,7 +131,7 @@ app.get('/export', function (req, res, next) {
 
   var dataArray;
 
-  Singapore.find().lean().exec({}, function (err, attendees) {
+  Attendee.find().lean().exec({}, function (err, attendees) {
 
     if (err) res.send(err);
 
