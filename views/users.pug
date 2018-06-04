@@ -13,10 +13,11 @@ block content
         <th scope="col">Name</th>
         <th scope="col">Email</th>
         <th scope="col">Country</th>
-        <th scope="col">First Meeting</th>
-        <th scope="col">Personal Meeting</th>
         <th scope="col">First Day</th>
         <th scope="col">Second Day</th>
+        <th scope="col">First Meeting</th>
+        <th scope="col">Personal Meeting</th>
+        <th scope="col">Contact Person</th>
         <th scope="col">Registered On</th>
       </tr>
     </thead>
@@ -27,10 +28,11 @@ block content
         <td>#{attendee.name}</td>
         <td>#{attendee.email}</td>
         <td>#{attendee.country}</td>
-        <td>#{attendee.firstMeeting}</td>
-        <td>#{attendee.personalMeeting}</td>
         <td>#{attendee.firstEvent}</td>
         <td>#{attendee.secondEvent}</td>
+        <td>#{attendee.firstMeeting}</td>
+        <td>#{attendee.personalMeeting}</td>
+        <td>#{attendee.isContactPerson}</td>
         <td>#{attendee.updated}</td>
       </tr>     
       //- else

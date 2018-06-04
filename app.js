@@ -28,7 +28,7 @@ const rsvpSchema = mongoose.Schema({
   eventCode: String,
   firstEvent: { type: String, default: 'No' },
   secondEvent: { type: String, default: 'No' },
-  isContactPerson: Boolean,
+  isContactPerson: String,
   contactPerson: String,
   rsvpCode: String
 });
@@ -62,15 +62,11 @@ app.get('/', function (req, res, next) {
 
 /* POST Registration Details */
 app.post('/register', function (req, res, next) {
-
   const eachAttendee = req.body.name;
   const eventLocation = req.body.event;
-
   let numberReg = eachAttendee.length;
-
   console.log('Number of Names: ' + numberReg);
   // res.send(eachAttendee);
-  
   eachAttendee.forEach(function(item, index) {
       const newRSVP = new Attendee({
         name: item,
@@ -81,11 +77,12 @@ app.post('/register', function (req, res, next) {
         eventCode: req.body.event,
         firstEvent: req.body.firstEvent[index],
         secondEvent: req.body.secondEvent[index],
-        contactPerson: req.body.email
+        contactPerson: req.body.email,
+        isContactPerson: req.body.name[0],
       });
       newRSVP.save().then(person => {
-      console.log('Registered', req.body.name);
-      res.send(person);
+      // console.log('Registered', req.body.name);
+      res.send('Success!');
     }, e => {
       console.log('Unable to Register');
       res.status(500).send('Something broke!');
@@ -93,50 +90,37 @@ app.post('/register', function (req, res, next) {
       res.send(e);
     });
   });
-  
 });
 
 /* View Registrant */
 app.get('/users', function (req, res, next) {
-  Attendee.find().then(item => {
-    if (item !== null) {
-      console.log(item);
-      res.render('users', 
-      { 
-        title: 'Attendees',
-        item,
-      });
-    } else {
-      res.redirect('/');
-    }
-  }).catch(function (error) {
-    res.status(500).send('Internal Server Error');
-  });
-
+  Attendee.find({})
+    .sort({ updated: 'asc' })
+    .then(item => {
+      if (item !== null) {
+        console.log(item);
+        res.render('users', { title: 'Attendees', item });
+      } else {
+        res.redirect('/');
+      }
+    })
+    .catch(function(error) {
+      res.status(500).send('Internal Server Error');
+    });
 });
 
+/* Exporting an EXCEL file */
 app.get('/export', function (req, res, next) {
-
   var filename = "rsvp.csv";
-
   var dataArray;
-
   Attendee.find().lean().exec({}, function (err, attendees) {
-
     if (err) res.send(err);
-
     res.statusCode = 200;
-
     res.setHeader('Content-Type', 'text/csv');
-
     res.setHeader("Content-Disposition", 'attachment; filename=' + filename);
-
     res.csv(attendees, true);
-
   });
-
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

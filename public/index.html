@@ -322,51 +322,6 @@
     
             <!-- For Additional Guests -->
             <div id="guestWrap">
-              <div class="guestentry card mb-3 border border-info">
-                <div class="card-body entry">
-                  <h4 class="text-info mb-3">Guest 1</h4>
-                  <div class="mb-3">
-                    <label for="name">Your name
-                      <span class="text-muted">(Required)</span>
-                    </label>
-                    <input name="name" type="text" class="form-control" id="name" placeholder="" value="" required="">
-                    <div class="invalid-feedback">
-                      Valid first name is required.
-                    </div>
-                  </div>
-                  <h5 class="mb-3 mt-4">Which event are you attending?</h5>
-                  <div class="mb-3">
-                    <div class="form-check form-check-inline">
-                      <input name="firstEvent" class="form-check-input" type="checkbox" value="Yes" id="firstEvent">
-                      <label class="form-check-label" for="firstEvent">Date Event 1/2/2018</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input name="secondEvent" class="form-check-input" type="checkbox" value="Yes" id="secondEvent">
-                      <label class="form-check-label" for="secondEvent">Date Event 2/2/2018</label>
-                    </div>
-                  </div>
-                  <h5 class="mb-3 mt-4">Is this your first time meeting Ishwar Ji?</h5>
-                  <div class="row">
-                    <div class="col-md-12 mb-3">
-                      <select name="firstMeeting" class="custom-select d-block w-100" id="firstMeeting" required="">
-                        <option value="No">Choose...</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                  </div>
-                  <h5 class="mb-3 mt-2">Request for personal meeting?</h5>
-                  <div class="row">
-                    <div class="col-md-12 mb-3">
-                      <select name="personalMeeting" class="custom-select d-block w-100" id="personalMeeting" required="">
-                        <option value="No">Choose...</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
     
             <!-- Add new Guest row -->
@@ -407,10 +362,21 @@
         if (count<5) {
           var guestEntry = document.createElement("div");
           guestEntry.className = "guestEntry card mb-3 border border-info";
-          guestEntry.innerHTML = "<h4 class='text-info mb-3'>Guest</h4><div class='mb-3'>"
+          guestEntry.innerHTML = "<div class='card-body entry'><h4 class='text-info mb-3'>Guest "+count+"</h4><div class='mb-3'>"
           +"<label for='name'>Your name<span class='text-muted'>(Required)</span></label>"
           +"<input name='name' type='text' class='form-control' id='name' placeholder='' value='' required=''>"
-          +"<div class='invalid-feedback'>Valid first name is required.</div></div>";
+          +"<div class='invalid-feedback'>Valid first name is required.</div></div>"
+          +"<h5 class'='mb-3 mt-4'>Which event are you attending?</h5>"
+          +"<div class='mb-3'><div class='form-check form-check-inline'><input name='firstEvent' class='form-check-input' type='checkbox' value='Yes' id='firstEvent'>"
+          +"<label class='form-check-label' for='firstEvent'>Date Event 1/2/2018</label></div>" 
+          +"<div class='form-check form-check-inline'><input name='secondEvent' class='form-check-input' type='checkbox' value='Yes' id='secondEvent'>"
+          +"<label class='form-check-label' for='secondEvent'>Date Event 2/2/2018</label></div></div>"
+          +"<h5 class='mb-3 mt-4'>Is this your first time meeting Ishwar Ji?</h5>"
+          +"<div class='row'><div class='col-md-12 mb-3'><select name='firstMeeting' class='custom-select d-block w-100' id='firstMeeting' required='><option value='No'>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div></div>"
+          +"<h5 class='mb-3 mt-2'>Request for personal meeting?</h5>"
+          +"<div class='row'><div class='col-md-12 mb-3'><select name='personalMeeting' class='custom-select d-block w-100' id='personalMeeting' required='><option value='No'>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div></div>"
+          +"</div>"
+          ;
           document.getElementById("guestWrap").appendChild(guestEntry);
           count++;
         }
