@@ -43,7 +43,7 @@ const app = express();
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -56,31 +56,55 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Define the Routes
 /* GET home page. */
-app.get('/', function (req, res, next) {
-  res.render('index', { title: 'Expressing' });
+app.get('/', (req, res, next) => {
+  res.render('pages/index', { title: 'Welcome' });
 });
 
 /* POST Registration Details */
-app.post('/register', function (req, res, next) {
+app.post('/register/:location', (req, res) => {
   const eachAttendee = req.body.name;
-  const eventLocation = req.body.event;
+  const eventLocation = req.params.location;
   let numberReg = eachAttendee.length;
-  console.log('Number of Names: ' + numberReg);
+  // console.log('Number of Names: ' + numberReg);
   // res.send(eachAttendee);
-  eachAttendee.forEach(function(item, index) {
-      const newRSVP = new Attendee({
-        name: item,
-        email: req.body.email,
-        country: req.body.country,
-        firstMeeting: req.body.firstMeeting[index],
-        personalMeeting: req.body.personalMeeting[index],
-        eventCode: req.body.event,
-        firstEvent: req.body.firstEvent[index],
-        secondEvent: req.body.secondEvent[index],
-        contactPerson: req.body.email,
-        isContactPerson: req.body.name[0],
+  if (Array.isArray(eachAttendee)) {
+    eachAttendee.forEach(function(item, index) {
+        const newRSVP = new Attendee({
+          name: item,
+          email: req.body.email,
+          country: req.body.country,
+          firstMeeting: req.body.firstMeeting[index],
+          personalMeeting: req.body.personalMeeting[index],
+          eventCode: eventLocation,
+          firstEvent: req.body.firstEvent[index],
+          secondEvent: req.body.secondEvent[index],
+          contactPerson: req.body.email,
+          isContactPerson: req.body.name[0],
+        });
+        newRSVP.save().then(person => {
+        // console.log('Registered', req.body.name);
+        res.send('Success!');
+      }, e => {
+        console.log('Unable to Register');
+        res.status(500).send('Something broke!');
+        res.status(404).send('WTF Not found!');
+        res.send(e);
       });
-      newRSVP.save().then(person => {
+    });
+  } else {
+    const newRSVP = new Attendee({
+      name: req.body.name,
+      email: req.body.email,
+      country: req.body.country,
+      firstMeeting: req.body.firstMeeting,
+      personalMeeting: req.body.personalMeeting,
+      eventCode: eventLocation,
+      firstEvent: req.body.firstEvent,
+      secondEvent: req.body.secondEvent,
+      contactPerson: req.body.email,
+      isContactPerson: req.body.name
+    });
+    newRSVP.save().then(person => {
       // console.log('Registered', req.body.name);
       res.send('Success!');
     }, e => {
@@ -88,32 +112,39 @@ app.post('/register', function (req, res, next) {
       res.status(500).send('Something broke!');
       res.status(404).send('WTF Not found!');
       res.send(e);
-    });
-  });
+    });    
+  }
 });
 
 /* View Registrant */
-app.get('/users', function (req, res, next) {
-  Attendee.find({})
-    .sort({ updated: 'asc' })
+app.get('/users/:event', (req, res) => {
+  let eventLocation = req.params.event;
+  Attendee.find({ eventCode: eventLocation })
+    .sort({ 
+      updated: 'asc', 
+    })
     .then(item => {
       if (item !== null) {
-        console.log(item);
-        res.render('users', { title: 'Attendees', item });
+        // console.log(item);
+        res.render('pages/users', { 
+          title: 'Attendees: ' + eventLocation,
+          location: eventLocation,
+          item 
+        });
       } else {
         res.redirect('/');
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       res.status(500).send('Internal Server Error');
     });
 });
 
 /* Exporting an EXCEL file */
-app.get('/export', function (req, res, next) {
+app.get('/export', (req, res, next) => {
   var filename = "rsvp.csv";
   var dataArray;
-  Attendee.find().lean().exec({}, function (err, attendees) {
+  Attendee.find().lean().exec({}, (err, attendees) => {
     if (err) res.send(err);
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/csv');
@@ -122,13 +153,17 @@ app.get('/export', function (req, res, next) {
   });
 });
 
+app.get('/demo', (req, res) => {
+  res.render('pages/demo');
+});
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -140,7 +175,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Server Port
-app.listen(3000, function () {
+app.listen(3000, () => {
   console.log('Example app listening on port 3000!')
 })
 
