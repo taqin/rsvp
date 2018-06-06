@@ -36,6 +36,22 @@ app.get('/', (req, res, next) => {
   res.render('pages/index', { title: 'Welcome' });
 });
 
+app.get('/:location', (req, res, next) => {
+  const eventLocation = req.params.location;
+  let evenPage = 'sg'
+  if (eventLocation == 'Singapore') {
+    eventPage = 'sg';
+  } else 
+  if (eventLocation == 'Malaysia') {
+    eventPage = 'my';
+  } else
+  if (eventLocation == 'Indonesia') {
+    eventPage = 'id';
+  }
+  res.render(`pages/index-${eventPage}`, { title: eventLocation });
+});
+
+
 /* POST Registration Details */
 app.post('/register/:location', (req, res) => {
   const eachAttendee = req.body.name;
