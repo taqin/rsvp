@@ -82,7 +82,8 @@ app.post('/register/:location', (req, res) => {
     });
     newRSVP.save().then(person => {
       // console.log('Registered', req.body.name);
-      res.send('Success!');
+      // res.send('Success!');
+      res.redirect('/success');
     }, e => {
       console.log('Unable to Register');
       res.status(500).send('Something broke!');
@@ -90,6 +91,12 @@ app.post('/register/:location', (req, res) => {
       res.send(e);
     });    
   }
+});
+
+app.get('/success', (req, res) => {
+  res.render('pages/success', {
+    title: 'Thank You for Registering!'
+  });
 });
 
 /* View Registrant */
