@@ -129,7 +129,7 @@ app.get('/export', (req, res, next) => {
 });
 
 // User Management
-app.get('/dashboard', isAuthenticated, (req, res) => {
+app.get('/dashboard', (req, res) => {
   res.render('pages/demo');
 });
 app.post('/users', (req, res) => {
