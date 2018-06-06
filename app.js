@@ -1,45 +1,22 @@
+require('./config/config');
+
+const _ = require('lodash');
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const mongoose = require('mongoose');
 const csv = require('csv-express');
 
-require('mongoose-type-email');
+const {mongoose} = require('./db/mongoose');
+const {Attendee} = require('./models/attendee');
+const {User} = require('./models/user');
 
-// Connect to the Database
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://127.0.0.1:27017/rsvp');
-
-// Define the  Schemas
-const eventSchema = mongoose.Schema({
-  name: String,
-  date: Date,
-});
-const rsvpSchema = mongoose.Schema({
-  // Do Data validation and default value
-  updated: { type: Date, default: Date.now },
-  name: { type: String, default: 'Nameless' },
-  email: mongoose.SchemaTypes.Email,
-  country: String,
-  firstMeeting: { type: String, default: 'No' },
-  personalMeeting: { type: String, default: 'No' },
-  eventCode: String,
-  firstEvent: { type: String, default: 'No' },
-  secondEvent: { type: String, default: 'No' },
-  isContactPerson: String,
-  contactPerson: String,
-  rsvpCode: String
-});
-
-// Define the Models
-// const Malaysia = mongoose.model('Malaysia', rsvpSchema);
-// const Indonesia = mongoose.model('Indonesia', rsvpSchema);
-const Attendee = mongoose.model('Attendee', rsvpSchema);
 
 // Power up the Express server
 const app = express();
+const port = process.env.PORT;
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,8 +28,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 
 // Define the Routes
 /* GET home page. */
@@ -153,14 +128,24 @@ app.get('/export', (req, res, next) => {
   });
 });
 
-app.get('/demo', (req, res) => {
+// User Management
+app.get('/dashboard', isAuthenticated, (req, res) => {
   res.render('pages/demo');
+});
+app.post('/users', (req, res) => {
+  const user = new User (req.body);
+  user.save().then((user)  => {
+    res.send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
 });
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 // error handler
 app.use((err, req, res, next) => {
@@ -175,8 +160,8 @@ app.use((err, req, res, next) => {
 });
 
 // Server Port
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!')
-})
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
+});
 
-module.exports = app;
+module.exports = { app };
