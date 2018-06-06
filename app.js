@@ -13,6 +13,8 @@ const {mongoose} = require('./db/mongoose');
 const {Attendee} = require('./models/attendee');
 const {User} = require('./models/user');
 
+const {authenticate} = require('./middleware/auth.js');
+
 
 // Power up the Express server
 const app = express();
@@ -27,22 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Authenticate middleware
-const authenticate = (req, res, next) => {
-  const token = req.header('x-auth');
-
-  User.findByToken(token).then((user) => {
-    if (!user){
-      return Promise.reject();
-    }
-    req.user = user;
-    req.token = token;
-    next();
-  }).catch((e) => {
-    res.status(401).send();
-  });
-};
 
 // Define the Routes
 /* GET home page. */
@@ -146,7 +132,9 @@ app.get('/export', (req, res, next) => {
 // User Management
 app.get('/dashboard', authenticate, (req, res) => {
   res.render('pages/demo');
+  // res.send(req.user);
 });
+
 app.post('/users', (req, res) => {
   
   const body = _.pick(req.body, ['email', 'password']);
