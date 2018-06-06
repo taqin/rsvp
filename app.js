@@ -28,6 +28,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Authenticate middleware
+const authenticate = (req, res, next) => {
+  const token = req.header('x-auth');
+
+  User.findByToken(token).then((user) => {
+    if (!user){
+      return Promise.reject();
+    }
+    req.user = user;
+    req.token = token;
+    next();
+  }).catch((e) => {
+    res.status(401).send();
+  });
+};
 
 // Define the Routes
 /* GET home page. */
@@ -129,13 +144,19 @@ app.get('/export', (req, res, next) => {
 });
 
 // User Management
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', authenticate, (req, res) => {
   res.render('pages/demo');
 });
 app.post('/users', (req, res) => {
-  const user = new User (req.body);
-  user.save().then((user)  => {
-    res.send(user);
+  
+  const body = _.pick(req.body, ['email', 'password']);
+  const user = new User(body);
+  user.save().then(() => {
+  
+  return user.generateAuthToken();
+
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
   }).catch((e) => {
     res.status(400).send(e);
   })
@@ -145,7 +166,6 @@ app.post('/users', (req, res) => {
 app.use((req, res, next) => {
   next(createError(404));
 });
-app.get('/favicon.ico', (req, res) => res.status(204));
 
 // error handler
 app.use((err, req, res, next) => {
@@ -164,4 +184,4 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
 
-module.exports = { app };
+module.exports = {app};

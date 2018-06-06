@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 require('mongoose-type-email');
 
 
-const rsvpSchema = mongoose.Schema({
+const RsvpSchema = new mongoose.Schema({
   // Do Data validation and default value
   updated: { type: Date, default: Date.now },
   name: { type: String, default: 'Nameless' },
@@ -19,7 +19,7 @@ const rsvpSchema = mongoose.Schema({
 });
 
 
-const Attendee = mongoose.model('Attendee', rsvpSchema);
+const Attendee = mongoose.model('Attendee', RsvpSchema);
 
 
 

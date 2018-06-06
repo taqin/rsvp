@@ -352,7 +352,7 @@
       function addRow() {
         if (count<5) {
           var guestEntry = document.createElement("div");
-          guestEntry.className = "guestEntry card mb-3 border border-info";
+          guestEntry.className = "guestEntry card mb-3 border border-info animated slideInDown";
           guestEntry.innerHTML = "<div class='card-body entry'><h4 class='text-info mb-3'>Guest "+count+"</h4><div class='mb-3'>"
           +"<label for='name'>Your name<span class='text-muted'>(Required)</span></label>"
           +"<input name='name' type='text' class='form-control' id='name' placeholder='' value='' required=''>"
