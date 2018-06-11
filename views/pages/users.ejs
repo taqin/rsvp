@@ -2,8 +2,26 @@
 
     <div class="container">
       <h1><%= title %></h1>
-      <nav class="navbar navbar-dark bg-dark">
-        <a href="/export/<%= location %>" class="btn btn-success" >Export to Excel</a>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./singapore">Singapore</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./malaysia">Malaysia</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./indonesia">Indonesia</a>
+            </li>
+          </ul>
+          <a href="./export/<%= location %>" class="btn btn-success" >Export to Excel</a>
+        </div>
       </nav>
       <table class="table table-bordered" style="font-size:11px;">
         <thead>

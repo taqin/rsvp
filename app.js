@@ -33,11 +33,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Define the Routes
 /* GET home page. */
 app.get('/', (req, res, next) => {
-  console.log('Not Working');
   res.render('pages/index', { title: 'Welcome' });
 });
 
-app.get('/:location', (req, res, next) => {
+app.get('/event/:location', (req, res, next) => {
   const eventLocation = req.params.location;
   let eventPage = 'sg'
   if (eventLocation == 'Singapore' || eventLocation == 'singapore') {
@@ -74,7 +73,7 @@ app.post('/register/:location', (req, res) => {
         });
         newRSVP.save().then(person => {
         // console.log('Registered', req.body.name);
-        res.send('Success!');
+        res.redirect('/success');
       }, e => {
         console.log('Unable to Register');
         res.status(500).send('Something broke!');
@@ -108,12 +107,6 @@ app.post('/register/:location', (req, res) => {
   }
 });
 
-app.get('/success', (req, res) => {
-  res.render('pages/success', {
-    title: 'Thank You for Registering!'
-  });
-});
-
 /* View Registrant */
 app.get('/users/:event', (req, res) => {
   let eventLocation = req.params.event;
@@ -125,7 +118,7 @@ app.get('/users/:event', (req, res) => {
       if (item !== null) {
         // console.log(item);
         res.render('pages/users', { 
-          title: 'Attendees: ' + eventLocation,
+          title: 'Attendees Dashboard',
           location: eventLocation,
           item 
         });
@@ -138,17 +131,29 @@ app.get('/users/:event', (req, res) => {
     });
 });
 
-/* Exporting an EXCEL file */
-app.get('/export', (req, res, next) => {
-  var filename = "rsvp.csv";
-  var dataArray;
-  Attendee.find().lean().exec({}, (err, attendees) => {
-    if (err) res.send(err);
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader("Content-Disposition", 'attachment; filename=' + filename);
-    res.csv(attendees, true);
+app.get('/success', (req, res, next) => {
+  // res.send('Success');
+  res.render('pages/success', {
+    title: 'Thank You for Registering!'
   });
+});
+
+
+/* Exporting an EXCEL file */
+app.get('/users/export/:event', (req, res, next) => {
+  console.log('Trigger');
+  let eventLocation = req.params.event;
+  var filename = 'rsvp.csv';
+  var dataArray;
+  Attendee.find({ eventCode: eventLocation })
+    .lean()
+    .exec({}, (err, attendees) => {
+      if (err) res.send(err);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+      res.csv(attendees, true);
+    });
 });
 
 // User Management
