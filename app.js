@@ -33,21 +33,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Define the Routes
 /* GET home page. */
 app.get('/', (req, res, next) => {
+  console.log('Not Working');
   res.render('pages/index', { title: 'Welcome' });
 });
 
 app.get('/:location', (req, res, next) => {
   const eventLocation = req.params.location;
-  let evenPage = 'sg'
-  if (eventLocation == 'Singapore') {
+  let eventPage = 'sg'
+  if (eventLocation == 'Singapore' || eventLocation == 'singapore') {
     eventPage = 'sg';
-  } else 
-  if (eventLocation == 'Malaysia') {
+  } else if (eventLocation == 'Malaysia' || eventLocation == 'malaysia' ) {
     eventPage = 'my';
-  } else
-  if (eventLocation == 'Indonesia') {
-    eventPage = 'id';
-  }
+  } else if (eventLocation == 'Indonesia' || eventLocation == 'indonesia') {
+           eventPage = 'id';
+         }
   res.render(`pages/index-${eventPage}`, { title: eventLocation });
 });
 
@@ -187,7 +186,7 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   // res.render('error');
-  res.status(500).send('500 Brave souls error');
+  res.status(500).send(`500 Brave souls error + ${err}`);
 });
 
 // Server Port

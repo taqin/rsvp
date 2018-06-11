@@ -1,0 +1,131 @@
+<%- include('../partials/header') %>
+<%- include('../partials/nav-main') %>
+    <header class="masthead">
+      <div id="carouselFade" class="carousel slide carousel-fade" data-ride="carousel">
+
+        <div id="carouselText" class="container">
+          <div class="row h-100">
+            <div class="col-lg-7 my-auto">
+              <div class="header-content mx-auto">
+                <h1 class="">Ishwar Puri Ji</h1>
+                <h2 class="mb-5">East Asia Visit</h2>
+                <h3><%= title %>, 22-24 April 2018</h3>
+                <p>Welcome Ishwar Puri Ji to Asia. All are welcome to attend</p>
+                <a href="#registration" class="btn bg-warning btn-xl js-scroll-trigger">Register for Event</a>
+              </div>
+            </div>
+            <div class="col-lg-5 my-auto">
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-inner">
+          <div id="firstSlide" class="carousel-item active"></div>
+          <div id="secondSlide" class="carousel-item"></div>
+          <div id="thirdSlide" class="carousel-item"></div>
+        </div>
+      </div>
+    </header>
+
+    <section id="event">
+      <div class="container event-listing">
+        <h1 class="text-center mb-3">Asia Events 2018</h1>
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <div class="event-img">
+                    <img src="/img/thumb-sg.jpg" data-holder-rendered="true">
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Singapore.</p>
+                    <div class="d-flex justify-content-between align-items-center text-center">
+                      <a href="/Singapore" class="btn btn-block btn-xl bg-warning">Register</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <div class="event-img">
+                    <img src="/img/thumb-kl.jpg" data-holder-rendered="true">
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Malaysia.</p>
+                    <div class="d-flex justify-content-between align-items-center text-center">
+                      <a href="/Malaysia" class="btn btn-block btn-xl bg-warning">Register</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <div class="event-img">
+                    <img src="/img/thumb-bali.jpg" data-holder-rendered="true">
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Indonesia.</p>
+                    <div class="d-flex justify-content-between align-items-center text-center">
+                      <a href="/Indonesia" class="btn btn-block btn-xl bg-warning">Register</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+
+      var count = 1;
+      function addRow() {
+        if (count<5) {
+          var guestEntry = document.createElement("div");
+          guestEntry.className = "guestEntry card mb-3 border border-info animated slideInDown";
+          guestEntry.innerHTML = "<div class='card-body entry'><h4 class='text-info mb-3'>Guest "+count+"</h4><div class='mb-3'>"
+          +"<label for='name'>Your name<span class='text-muted'>(Required)</span></label>"
+          +"<input name='name' type='text' class='form-control' id='name' placeholder='' value='' required=''>"
+          +"<div class='invalid-feedback'>Valid first name is required.</div></div>"
+          +"<h5 class'='mb-3 mt-4'>Which event are you attending?</h5>"
+          +"<div class='mb-3'><div class='form-check form-check-inline'><input name='firstEvent' class='form-check-input' type='checkbox' value='Yes' id='firstEvent'>"
+          +"<label class='form-check-label' for='firstEvent'>Date Event 1/2/2018</label></div>" 
+          +"<div class='form-check form-check-inline'><input name='secondEvent' class='form-check-input' type='checkbox' value='Yes' id='secondEvent'>"
+          +"<label class='form-check-label' for='secondEvent'>Date Event 2/2/2018</label></div></div>"
+          +"<h5 class='mb-3 mt-4'>Is this your first time meeting Ishwar Ji?</h5>"
+          +"<div class='row'><div class='col-md-12 mb-3'><select name='firstMeeting' class='custom-select d-block w-100' id='firstMeeting' required='><option value='No'>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div></div>"
+          +"<h5 class='mb-3 mt-2'>Request for personal meeting?</h5>"
+          +"<div class='row'><div class='col-md-12 mb-3'><select name='personalMeeting' class='custom-select d-block w-100' id='personalMeeting' required='><option value='No'>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div></div>"
+          +"</div>"
+          ;
+          document.getElementById("guestWrap").appendChild(guestEntry);
+          count++;
+        }
+        if (count == 5) {
+          document.getElementById("addGuest").style.visibility = "hidden";
+        }
+      }
+    </script>
+
+
+<%- include('../partials/footer') %> 

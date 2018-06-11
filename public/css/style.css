@@ -352,6 +352,14 @@ section.features .feature-item i {
   -webkit-text-fill-color: transparent;
 }
 
+.event-listing .event-img {
+  overflow: hidden;
+  height: 300px;
+}
+  .event-listing .event-img img {
+    width: 100%;
+  }
+
 section.cta {
   position: relative;
   padding: 250px 0;
@@ -363,6 +371,29 @@ section.cta {
   background-size: cover;
   color: #FFF;
 }
+section.cta.bali {
+  position: relative;
+  padding: 250px 0;
+  background-image: url("../img/bg-bali.jpg");
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #FFF;
+}
+section.cta.kl {
+  position: relative;
+  padding: 250px 0;
+  background-image: url("../img/bg-kl.jpg");
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #FFF;
+}
+
 
 section.cta .cta-content {
   position: relative;
