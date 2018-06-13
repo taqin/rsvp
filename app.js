@@ -52,12 +52,17 @@ app.get('/event/:location', (req, res, next) => {
 
 /* POST Registration Details */
 app.post('/register/:location', (req, res) => {
+  // res.send(req.body);
   const eachAttendee = req.body.name;
   const eventLocation = req.params.location;
   let numberReg = eachAttendee.length;
   // console.log('Number of Names: ' + numberReg);
   // res.send(eachAttendee);
   if (Array.isArray(eachAttendee)) {
+    // Set fields to array
+    // let firstEvent = [req.body.firstEvent];
+    // let secondEvent = [req.body.secondEvent];
+
     eachAttendee.forEach(function(item, index) {
         const newRSVP = new Attendee({
           name: item,
@@ -69,10 +74,11 @@ app.post('/register/:location', (req, res) => {
           firstEvent: req.body.firstEvent[index],
           secondEvent: req.body.secondEvent[index],
           contactPerson: req.body.email,
-          isContactPerson: req.body.name[0],
+          isContactPerson: req.body.name[0]
         });
         newRSVP.save().then(person => {
         // console.log('Registered', req.body.name);
+        // res.redirect(`/event/${eventLocation}/success`, eventLocation);
         res.redirect('/success');
       }, e => {
         console.log('Unable to Register');
@@ -97,6 +103,7 @@ app.post('/register/:location', (req, res) => {
     newRSVP.save().then(person => {
       // console.log('Registered', req.body.name);
       // res.send('Success!');
+      // res.redirect(`/event/${eventLocation}/success`);
       res.redirect('/success');
     }, e => {
       console.log('Unable to Register');
@@ -132,7 +139,6 @@ app.get('/users/:event', (req, res) => {
 });
 
 app.get('/success', (req, res, next) => {
-  // res.send('Success');
   res.render('pages/success', {
     title: 'Thank You for Registering!'
   });
