@@ -297,14 +297,26 @@
               </div>
       
               <h5 class="mb-3 mt-5">Which event are you attending?</h5>
-              <div class="mb-4">
-                <div class="form-check form-check-inline">
-                  <input name="firstEvent" class="form-check-input" type="checkbox" value="Yes" id="firstEvent">
-                  <label class="form-check-label">24th Oct 2018 (Wednesday)</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input name="secondEvent" class="form-check-input" type="checkbox" value="Yes" id="secondEvent">
-                  <label class="form-check-label">25th Oct 2018 (Thursday)</label>
+              <div class="mb-4 no-gutters">
+                <div class="container">
+                  <div class="row">
+                    <div class="form-check form-check-inlinex col-md-6">
+                      <label>24th Oct 2018 (Wednesday)</label>
+                      <select name="firstEvent" id="firstEvent" class="custom-select d-block form-control-sm">
+                        <option value="No" selected>Choose...</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                    </div>
+                    <div class="form-check form-check-inlinex col-md-6">
+                      <label>25th Oct 2018 (Thursday)</label>
+                      <select name="secondEvent" id="secondEvent" class="custom-select d-block form-control-sm">
+                        <option value="No" selected>Choose...</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
               <h5 class="mb-3 mt-2">Is this your first time meeting Ishwar Ji?</h5>
@@ -417,10 +429,10 @@
           +"<input name='name' type='text' class='form-control' id='name' placeholder='' value='' required=''>"
           +"<div class='invalid-feedback'>Valid first name is required.</div></div>"
           +"<h5 class'='mb-3 mt-4'>Which event are you attending?</h5>"
-          +"<div class='mb-3'><div class='form-check form-check-inline'><input name='firstEvent' class='form-check-input' type='checkbox' value='Yes' id='firstEvent'>"
-          +"<label class='form-check-label'>24th Oct 2018 (Wednesday)</label></div>" 
-          +"<div class='form-check form-check-inline'><input name='secondEvent' class='form-check-input' type='checkbox' value='Yes' id='secondEvent'>"
-          +"<label class='form-check-label'>25th Oct 2018 (Thursday)</label></div></div>"
+          +"<div class='mb-4 no-gutters'><div class='container'><div class='row'>"
+          +"<div class='form-check form-check-inlinex col-md-6'><label>24th Oct 2018 (Wednesday)</label><select name='firstEvent' id='firstEvent' class='custom-select d-block form-control-sm'><option value='No' selected>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div>"
+          +" <div class='form-check form-check-inlinex col-md-6'><label>25th Oct 2018 (Thursday)</label><select name='secondEvent' id='secondEvent' class='custom-select d-block form-control-sm'><option value='No' selected>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div>"
+          +"</div></div></div>"
           +"<h5 class='mb-3 mt-4'>Is this your first time meeting Ishwar Ji?</h5>"
           +"<div class='row'><div class='col-md-12 mb-3'><select name='firstMeeting' class='custom-select d-block w-100' id='firstMeeting' required><option value='No' selected>Choose...</option><option value='Yes'>Yes</option><option value='No'>No</option></select></div></div>"
           +"<h5 class='mb-3 mt-2'>Request for personal meeting?</h5>"
