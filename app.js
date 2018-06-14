@@ -125,7 +125,7 @@ app.get('/users/:event', (req, res) => {
       if (item !== null) {
         // console.log(item);
         res.render('pages/users', { 
-          title: 'Attendees Dashboard',
+          title: 'Attendees',
           location: eventLocation,
           item 
         });
