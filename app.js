@@ -60,14 +60,12 @@ app.post('/register/:location', (req, res) => {
   // res.send(eachAttendee);
   if (Array.isArray(eachAttendee)) {
     // Set fields to array
-    // let firstEvent = [req.body.firstEvent];
-    // let secondEvent = [req.body.secondEvent];
 
     eachAttendee.forEach(function(item, index) {
         const newRSVP = new Attendee({
           name: item,
           email: req.body.email,
-          country: req.body.country,
+          country: req.body.country[index],
           firstMeeting: req.body.firstMeeting[index],
           personalMeeting: req.body.personalMeeting[index],
           eventCode: eventLocation,
