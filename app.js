@@ -115,6 +115,7 @@ app.post('/register/:location', (req, res) => {
 
 /* View Registrant */
 app.get('/users/:event', (req, res) => {
+  const fullUrl = req.protocol + '://' + req.get('host');
   let eventLocation = req.params.event;
   Attendee.find({ eventCode: eventLocation })
     .sort({ 
@@ -126,6 +127,7 @@ app.get('/users/:event', (req, res) => {
         res.render('pages/users', { 
           title: 'Attendees',
           location: eventLocation,
+          host: fullUrl,
           item 
         });
       } else {
