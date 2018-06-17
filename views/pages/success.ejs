@@ -1,13 +1,45 @@
-<%- include('../partials/header') %>
+<!DOCTYPE html>
+<html>
 
-  <div class="container">
-    <main role="main" class="inner cover text-center">
-      <h1 class="cover-heading">Successfully registered.</h1>
-      <p class="lead">You will receive further instructions from the event host with regards to the venue. You will also receive the welcome kit via the email address that you have provided.</p>
-      <p class="lead">
-        <a href="https://www.ishanews.org/events/" class="btn btn-lg btn-secondary">Back Home</a>
-      </p>
-    </main>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>
+    <%= title %>
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+  <link rel="stylesheet" href="<%= host %>/css/bootstrap.min.css">
+  <!-- Custom fonts for this template -->
+  <!-- <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css"> -->
+  <!-- <link rel="stylesheet" href="css/simple-line-icons/css/simple-line-icons.css"> -->
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+  <link href="<%= host %>/css/style.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <div class="container mt-5">
+    <div class="col-md-8 offset-2">
+      <div class="card text-center">
+        <div class="card-body">
+          <h1 class="card-title text-success mb-5">Successfully registered.</h1>
+          <p class="card-text">You will receive further instructions from the event host with regards to the venue in <strong>3 to 5 days time</strong>. You will also receive the welcome kit via the email address that you have provided.</p>
+          <p><a href="./" class="btn btn-lg btn-secondary" style="color:#FFF;">Close</a></p>
+        </div>
+      </div>
+    </div>
   </div>
-
-<%- include('../partials/footer') %> 
+  <script>
+  function close_window() {
+    window.close();
+  }
+  </script>
+</body>
+</html>

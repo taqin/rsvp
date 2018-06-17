@@ -37,6 +37,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/event/:location', (req, res, next) => {
+  const fullUrl = req.protocol + '://' + req.get('host');
   const eventLocation = req.params.location;
   let eventPage = 'sg'
   if (eventLocation == 'Singapore' || eventLocation == 'singapore') {
@@ -46,7 +47,10 @@ app.get('/event/:location', (req, res, next) => {
   } else if (eventLocation == 'Indonesia' || eventLocation == 'indonesia') {
            eventPage = 'id';
          }
-  res.render(`pages/index-${eventPage}`, { title: eventLocation });
+  res.render(`pages/index-${eventPage}`, {
+    title: eventLocation,
+    host: fullUrl
+  });
 });
 
 
@@ -75,9 +79,7 @@ app.post('/register/:location', (req, res) => {
           isContactPerson: req.body.name[0]
         });
         newRSVP.save().then(person => {
-        // console.log('Registered', req.body.name);
-        // res.redirect(`/event/${eventLocation}/success`, eventLocation);
-        res.redirect('/success');
+        res.redirect(`/event/${eventLocation}/success`);
       }, e => {
         console.log('Unable to Register');
         res.status(500).send('Something broke!');
@@ -101,8 +103,7 @@ app.post('/register/:location', (req, res) => {
     newRSVP.save().then(person => {
       // console.log('Registered', req.body.name);
       // res.send('Success!');
-      // res.redirect(`/event/${eventLocation}/success`);
-      res.redirect('/success');
+      res.redirect(`/event/${eventLocation}/success`);
     }, e => {
       console.log('Unable to Register');
       res.status(500).send('Something broke!');
@@ -136,9 +137,11 @@ app.get('/users/:event', (req, res) => {
     });
 });
 
-app.get('/success', (req, res, next) => {
+app.get('/event/:location/success', (req, res, next) => {
+  const fullUrl = req.protocol + '://' + req.get('host');
   res.render('pages/success', {
-    title: 'Thank You for Registering!'
+    title: 'Thank You for Registering!',
+    host: fullUrl
   });
 });
 
