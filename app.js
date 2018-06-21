@@ -19,6 +19,7 @@ const {authenticate} = require('./middleware/auth.js');
 // Power up the Express server
 const app = express();
 const port = process.env.PORT;
+const proxy = process.env.PROXY;
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Define the Routes
 /* GET home page. */
 app.get('/', (req, res, next) => {
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const fullUrl = proxy + req.get('host');
+  console.log(fullUrl);
   res.render('pages/index', { 
     title: 'Welcome',
     host: fullUrl
