@@ -33,7 +33,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Define the Routes
 /* GET home page. */
 app.get('/', (req, res, next) => {
-  res.render('pages/index', { title: 'Welcome' });
+  const fullUrl = req.protocol + '://' + req.get('host');
+  res.render('pages/index', { 
+    title: 'Welcome',
+    host: fullUrl
+   });
 });
 
 app.get('/event/:location', (req, res, next) => {
