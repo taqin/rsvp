@@ -43,7 +43,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/event/:location', (req, res, next) => {
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const fullUrl = proxy + req.get('host');
   const eventLocation = req.params.location;
   let eventPage = 'sg'
   if (eventLocation == 'Singapore' || eventLocation == 'singapore') {
@@ -121,7 +121,7 @@ app.post('/register/:location', (req, res) => {
 
 /* View Registrant */
 app.get('/users/:event', (req, res) => {
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const fullUrl = proxy + req.get('host');
   let eventLocation = req.params.event;
   Attendee.find({ eventCode: eventLocation })
     .sort({ 
@@ -146,7 +146,7 @@ app.get('/users/:event', (req, res) => {
 });
 
 app.get('/event/:location/success', (req, res, next) => {
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const fullUrl = proxy + req.get('host');
   res.render('pages/success', {
     title: 'Thank You for Registering!',
     host: fullUrl
