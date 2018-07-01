@@ -5,6 +5,7 @@ if (result.error) {
   throw result.error;
 }
 
+const session = require('express-session');
 const _ = require('lodash');
 
 const createError = require('http-errors');
@@ -20,9 +21,9 @@ const {User} = require('./models/user');
 
 const {authenticate} = require('./middleware/auth.js');
 
-
 // Power up the Express server
 const app = express();
+app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 60000 } }));
 const port = process.env.PORT;
 const proxy = process.env.PROXY;
 
@@ -35,6 +36,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Check authorization
+function checkAuth(req, res, next) {
+  if (!req.session.user_id) {
+    // res.send('You are not authorized to view this page');
+    res.redirect(`/login`);
+  } else {
+    next();
+  }
+};
 
 // Define the Routes
 /* GET home page. */
@@ -122,6 +133,10 @@ app.post('/register/:location', (req, res) => {
       res.send(e);
     });    
   }
+});
+
+app.get('/login', (req, res) => {
+  res.send('Login Page');
 });
 
 /* View Registrant */
