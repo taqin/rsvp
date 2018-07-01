@@ -1,9 +1,5 @@
 const dotenv = require('dotenv');
-const result = dotenv.config();
-
-if (result.error) {
-  throw result.error;
-}
+require('dotenv').config();
 
 const session = require('express-session');
 const _ = require('lodash');
