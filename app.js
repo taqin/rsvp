@@ -19,7 +19,7 @@ const {authenticate} = require('./middleware/auth.js');
 
 // Power up the Express server
 const app = express();
-app.use(session({ secret: 'this-is-a-secret-token', cookie: { maxAge: 60000 } }));
+app.use(session({ secret: '9zXw5cmHMrOObUWinxg1', cookie: { maxAge: 60000 } }));
 const port = process.env.PORT;
 const proxy = process.env.PROXY;
 
@@ -34,9 +34,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Check authorization
-function checkAuth(req, res, next) {
+function secureAuth(req, res, next) {
   if (!req.session.user_id) {
-    // res.send('You are not authorized to view this page');
     res.redirect(`/login`);
   } else {
     next();
@@ -132,11 +131,28 @@ app.post('/register/:location', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.send('Login Page');
+  const fullUrl = proxy + req.get('host');
+  res.render('pages/login', {
+    title: 'Attendees',
+    host: fullUrl
+  });
+});
+
+app.post('/login', (req, res) => {
+  const user = process.env.USERID;
+  const pass = process.env.PASSWORD;
+
+  if (req.body.inputUser === user && req.body.inputPassword === pass) {
+    req.session.user_id = 'session_user_cookie';
+    // res.send('It Works!');
+    res.redirect('/users/singapore');
+  } else {
+    res.send('Bad user/pass');
+  }
 });
 
 /* View Registrant */
-app.get('/users/:event', (req, res) => {
+app.get('/users/:event', secureAuth, (req, res) => {
   const fullUrl = proxy + req.get('host');
   let eventLocation = req.params.event;
   Attendee.find({ eventCode: eventLocation })
@@ -171,7 +187,7 @@ app.get('/event/:location/success', (req, res, next) => {
 
 
 /* Exporting an EXCEL file */
-app.get('/users/export/:event', (req, res, next) => {
+app.get('/users/export/:event', secureAuth, (req, res, next) => {
   console.log('Trigger');
   let eventLocation = req.params.event;
   var filename = 'rsvp.csv';
