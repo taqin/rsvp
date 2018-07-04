@@ -10,6 +10,7 @@
 *.sublime-project
 *.original
 *.env
+*.json
 .eslintrc.json
 /lib-cov
 /pids

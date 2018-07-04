@@ -203,10 +203,13 @@ app.get('/users/export/:event', secureAuth, (req, res, next) => {
     });
 });
 
-// User Management
-app.get('/dashboard', authenticate, (req, res) => {
-  res.render('pages/demo');
-  // res.send(req.user);
+// Error Management
+app.get('/error', (req, res) => {
+  const fullUrl = proxy + req.get('host');
+  res.render('pages/error', {
+    title: 'Error',
+    host: fullUrl
+  });
 });
 
 app.post('/users', (req, res) => {
