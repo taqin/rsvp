@@ -161,7 +161,7 @@ app.get('/users/:event', secureAuth, (req, res) => {
     })
     .then(item => {
       if (item !== null) {
-        // console.log(item);
+        console.log(item.length);
         res.render('pages/users', { 
           title: 'Attendees',
           location: eventLocation,
