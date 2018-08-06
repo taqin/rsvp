@@ -405,7 +405,17 @@ section.cta.sg {
   background-size: cover;
   color: #FFF;
 }
-
+section.cta.th {
+  position: relative;
+  padding: 250px 0;
+  background-image: url("../img/bg-sg.jpg");
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #FFF;
+}
 
 section.cta .cta-content {
   position: relative;

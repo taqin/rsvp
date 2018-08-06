@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+</nav>
+    
+    <div class="container">
+      <div class="jumbotron mt-4">
+        <h1 class="display-4"><span style="text-transform:uppercase;"><%= location %></span></h1>
+        <a href="./export/<%= location %>" class="btn btn-success float-right" >Export to Excel</a>
+        <p class="lead"><%= title %> <span class="badge badge-info"><%= item.length %></span></p>
+      </div>
+      <table class="table table-bordered" style="font-size:11px;">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Country</th>
+            <th scope="col">First Meeting</th>
+            <th scope="col">Personal Meeting</th>
+            <th scope="col">Contact Person</th>
+            <th scope="col">Event Location</th>
+            <th scope="col">Registered On</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <% item.forEach(function(attendee, index) { %>      
+          <tr>
+            <th scope="row"><%= index+1 %></th>
+            <td><%= attendee.name %></td>
+            <td><%= attendee.email %></td>
+            <td><%= attendee.country %></td>
+            <td><%= attendee.firstMeeting %></td>
+            <td><%= attendee.personalMeeting %></td>
+            <td><%= attendee.isContactPerson %></td>
+            <td><%= attendee.eventCode %></td>            
+            <td><%= attendee.updated %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="<%= host %>/js/jquery/jquery.min.js"></script>
+    <script src="<%= host %>/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

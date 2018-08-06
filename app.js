@@ -11,11 +11,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const csv = require('csv-express');
 
-const {mongoose} = require('./db/mongoose');
-const {Attendee} = require('./models/attendee');
-const {User} = require('./models/user');
+const { mongoose } = require('./db/mongoose');
+const { Attendee } = require('./models/attendee');
+const { AttendeeThai } = require('./models/attendee-thailand');
+const { User } = require('./models/user');
 
-const {authenticate} = require('./middleware/auth.js');
+const { Emailer } = require('./middleware/email.js');
+const { authenticate } = require('./middleware/auth.js');
 
 // Power up the Express server
 const app = express();
@@ -42,6 +44,19 @@ function secureAuth(req, res, next) {
   }
 };
 
+app.get('/sendemail', (res, req) => {
+  try {
+    Emailer({
+      email: 'taqin83@gmail.com',
+      type: 'thai',
+      from: 'Thai Oct Event 2018'
+    });
+  } catch (error) {
+    res.status(200).send('email sent! Check Inbox');
+    res.status(404).send('WTF Email not set!');
+  }
+})
+
 // Define the Routes
 /* GET home page. */
 app.get('/', (req, res, next) => {
@@ -63,7 +78,9 @@ app.get('/event/:location', (req, res, next) => {
     eventPage = 'my';
   } else if (eventLocation == 'Indonesia' || eventLocation == 'indonesia') {
            eventPage = 'id';
-         }
+  } else if (eventLocation == 'Thailand' || eventLocation == 'thailand') {
+    eventPage = 'th';
+  }
   res.render(`pages/index-${eventPage}`, {
     title: eventLocation,
     host: fullUrl
@@ -142,10 +159,17 @@ app.post('/login', (req, res) => {
   const user = process.env.USERID;
   const pass = process.env.PASSWORD;
 
+  const user2 = process.env.USERID2;
+  const pass2 = process.env.PASSWORD2;
+
   if (req.body.inputUser === user && req.body.inputPassword === pass) {
     req.session.user_id = 'session_user_cookie';
     // res.send('It Works!');
     res.redirect('/users/singapore');
+  } else if (req.body.inputUser === user2 && req.body.inputPassword === pass2) {
+    req.session.user_id = 'session_user_cookie';
+    // res.send('It Works!');
+    res.redirect('/users/thailand');
   } else {
     res.send('Bad user/pass');
   }
@@ -155,6 +179,14 @@ app.post('/login', (req, res) => {
 app.get('/users/:event', secureAuth, (req, res) => {
   const fullUrl = proxy + req.get('host');
   let eventLocation = req.params.event;
+  let pageRender = "";
+  //Check if route is Thailand
+  if (eventLocation=="thailand") {
+    pageRender = 'pages/users-thailand';
+  } else {
+    pageRender = 'pages/users';
+  }
+
   Attendee.find({ eventCode: eventLocation })
     .sort({ 
       updated: 'asc', 
@@ -162,11 +194,11 @@ app.get('/users/:event', secureAuth, (req, res) => {
     .then(item => {
       if (item !== null) {
         console.log(item.length);
-        res.render('pages/users', { 
+        res.render(pageRender, {
           title: 'Attendees',
           location: eventLocation,
           host: fullUrl,
-          item 
+          item
         });
       } else {
         res.redirect('/');
