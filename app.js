@@ -147,6 +147,77 @@ app.post('/register/:location', (req, res) => {
   }
 });
 
+app.post('/registerThai', (req, res) => {
+  // res.send(req.body);
+  const eachAttendee = req.body.name;
+  const attendeeEmail = req.body.email;
+  const eventLocation = 'Thailand';
+  let numberReg = eachAttendee.length;
+  // console.log('Number of Names: ' + numberReg);
+  // res.send(eachAttendee);
+  if (Array.isArray(eachAttendee)) {
+    // Set fields to array
+    eachAttendee.forEach(function (item, index) {
+      const newRSVP = new AttendeeThai({
+        name: item,
+        email: req.body.email,
+        country: req.body.country[index],
+        firstMeeting: req.body.firstMeeting[index],
+        personalMeeting: req.body.personalMeeting[index],
+        eventCode: eventLocation,
+        contactPerson: req.body.email,
+        isContactPerson: req.body.name[0]
+      });
+      newRSVP.save().then(person => {
+        // Send out the email
+        Emailer({
+          email: attendeeEmail,
+          type: 'thai',
+          from: 'Thai Event 2018'
+        });
+        // Redirect to Success page
+        res.redirect(`/event/${eventLocation}/success`);
+      }, e => {
+        console.log('Unable to Register');
+        res.status(500).send('Something broke!');
+        res.status(404).send('WTF Not found!');
+        res.send(e);
+      });
+    });
+  } else {
+    const newRSVP = new AttendeeThai({
+      name: req.body.name,
+      email: req.body.email,
+      country: req.body.country,
+      firstMeeting: req.body.firstMeeting,
+      personalMeeting: req.body.personalMeeting,
+      eventCode: eventLocation,
+      contactPerson: req.body.email,
+      isContactPerson: req.body.name
+    });
+    newRSVP.save().then(person => {
+      // Send out the email
+      try {
+        Emailer({
+          email: attendeeEmail,
+          type: 'thai',
+          from: 'Thai Oct Event 2018'
+        });
+      } catch (error) {
+        res.status(200).send('email sent! Check Inbox');
+        res.status(404).send('WTF Email not set!');
+      }
+      res.redirect(`/event/${eventLocation}/success`);
+    }, e => {
+      console.log('Unable to Register');
+      res.status(500).send('Something broke!');
+      res.status(404).send('WTF Not found!');
+      res.send(e);
+    });
+  }
+});
+
+
 app.get('/login', (req, res) => {
   const fullUrl = proxy + req.get('host');
   res.render('pages/login', {
@@ -183,30 +254,51 @@ app.get('/users/:event', secureAuth, (req, res) => {
   //Check if route is Thailand
   if (eventLocation=="thailand") {
     pageRender = 'pages/users-thailand';
+    AttendeeThai.find()
+      .sort({
+        updated: 'asc',
+      })
+      .then(item => {
+        if (item !== null) {
+          console.log(item.length);
+          res.render(pageRender, {
+            title: 'Thai Attendees',
+            location: eventLocation,
+            host: fullUrl,
+            item
+          });
+        } else {
+          res.redirect('/');
+        }
+      })
+      .catch((error) => {
+        res.status(500).send('Internal Server Error');
+      });
   } else {
     pageRender = 'pages/users';
+    Attendee.find({ eventCode: eventLocation })
+      .sort({
+        updated: 'asc',
+      })
+      .then(item => {
+        if (item !== null) {
+          console.log(item.length);
+          res.render(pageRender, {
+            title: 'Attendees',
+            location: eventLocation,
+            host: fullUrl,
+            item
+          });
+        } else {
+          res.redirect('/');
+        }
+      })
+      .catch((error) => {
+        res.status(500).send('Internal Server Error');
+      });
   }
 
-  Attendee.find({ eventCode: eventLocation })
-    .sort({ 
-      updated: 'asc', 
-    })
-    .then(item => {
-      if (item !== null) {
-        console.log(item.length);
-        res.render(pageRender, {
-          title: 'Attendees',
-          location: eventLocation,
-          host: fullUrl,
-          item
-        });
-      } else {
-        res.redirect('/');
-      }
-    })
-    .catch((error) => {
-      res.status(500).send('Internal Server Error');
-    });
+
 });
 
 app.get('/event/:location/success', (req, res, next) => {
@@ -224,7 +316,9 @@ app.get('/users/export/:event', secureAuth, (req, res, next) => {
   let eventLocation = req.params.event;
   var filename = 'rsvp.csv';
   var dataArray;
-  Attendee.find({ eventCode: eventLocation })
+
+  if (eventLocation == "thailand") {
+  AttendeeThai.find()
     .lean()
     .exec({}, (err, attendees) => {
       if (err) res.send(err);
@@ -233,6 +327,17 @@ app.get('/users/export/:event', secureAuth, (req, res, next) => {
       res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
       res.csv(attendees, true);
     });
+  } else {
+  Attendee.find({ eventCode: eventLocation })
+    .lean()
+    .exec({}, (err, attendees) => {
+      if (err) res.send(err);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+      res.csv(attendees, true);
+    });    
+  }
 });
 
 // Error Management
