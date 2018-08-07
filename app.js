@@ -303,10 +303,19 @@ app.get('/users/:event', secureAuth, (req, res) => {
 
 app.get('/event/:location/success', (req, res, next) => {
   const fullUrl = proxy + req.get('host');
-  res.render('pages/success', {
+  const eventLocation = req.params.location;
+  let successPage = "";
+
+  if (eventLocation == 'Thailand' || eventLocation == 'thailand') {
+    successPage = 'pages/success-thailand';
+  } else {
+    successPage = 'pages/success';
+  }
+  res.render(successPage, {
     title: 'Thank You for Registering!',
     host: fullUrl
   });
+  
 });
 
 
