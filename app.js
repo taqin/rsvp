@@ -172,6 +172,7 @@ app.post('/registerThai', (req, res) => {
         // Send out the email
         Emailer({
           email: attendeeEmail,
+          to: item, 
           type: 'thai',
           from: 'Thai Event 2018'
         });

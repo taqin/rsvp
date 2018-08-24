@@ -11,6 +11,7 @@ const Emailer = (email) => {
   const emailAddress = email.email;
   const emailAcct = email.type;
   const emailFrom = email.from;
+  const emailTo = email.to;
 
   // Takes in 1 or 2 for toggling email
   if (emailAcct == 'thai') {
@@ -36,7 +37,7 @@ const Emailer = (email) => {
 
     // Email HTML body
     html: '<h4>Thai October Event 2018</h4>'
-    +'<p>Hi Friend!</p>'
+    +'<p>Hi '+ emailTo + ' !</p>'
     +'<p>This email confirms your registration to attend the special ISTA meeting in Chiang Mai, Thailand on 12th to 14th October 2018.</p>'
     +'<p>You are now registered for the event. If unforeseen circumstances arise and you cannot attend the event, kindly reply this email to withdraw your participation. This will help us update our registry.</p>'
     +'<p>The Welcome Kit is prepared and contains information, such as venue address, etc.</p>'
