@@ -36,11 +36,11 @@ const Emailer = (email) => {
 
     // Email HTML body
     html: '<h4>Thai October Event 2018</h4>'
-    +'<p>Hi!</p>'
-    +'<p>This email confirms your registration to attend the special ISTA meeting in Chiang Mai, Thailand on 12 to 14 October 2018.</p>'
-    +'<p>You are now registered to the event.If unforeseen circumstances arise and you could not attend the event, kindly reply this email to withdraw your participation.This will help us update our registry.</p>'
-    +'<p>The Welcome Kit is prepared and contains information like venue address, etc.</p>'
-      +'<p><a href="http://tour.ishwarji.com/welcome/thailand_welcome_kit.pdf">Please download it here.</a></p>'
+    +'<p>Hi Friend!</p>'
+    +'<p>This email confirms your registration to attend the special ISTA meeting in Chiang Mai, Thailand on 12th to 14th October 2018.</p>'
+    +'<p>You are now registered for the event. If unforeseen circumstances arise and you cannot attend the event, kindly reply this email to withdraw your participation. This will help us update our registry.</p>'
+    +'<p>The Welcome Kit is prepared and contains information, such as venue address, etc.</p>'
+    +'<p><a href="http://tour.ishwarji.com/welcome/thailand_welcome_kit.pdf">Please download it here.</a></p>'
     +'<p>Thank you for your registration.See you in October!</p>'
     +'<br/>'
     +'<p>Regards,</p>'
