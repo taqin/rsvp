@@ -181,7 +181,7 @@ app.post('/registerThai', (req, res) => {
       }, e => {
         console.log('Unable to Register');
         res.status(500).send('Something broke!');
-        res.status(404).send('WTF Not found!');
+        res.status(404).send('Not found!');
         res.send(e);
       });
     });
@@ -201,12 +201,13 @@ app.post('/registerThai', (req, res) => {
       try {
         Emailer({
           email: attendeeEmail,
+          to: req.body.name,
           type: 'thai',
           from: 'Thai Oct Event 2018'
         });
       } catch (error) {
-        res.status(200).send('email sent! Check Inbox');
-        res.status(404).send('WTF Email not set!');
+        // res.status(200).send('email sent! Check Inbox');
+        res.status(404).send('Oh no Email not set!');
       }
       res.redirect(`/event/${eventLocation}/success`);
     }, e => {
