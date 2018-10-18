@@ -75,11 +75,13 @@ app.get('/event/:location', (req, res, next) => {
   if (eventLocation == 'Singapore' || eventLocation == 'singapore') {
     eventPage = 'sg';
   } else if (eventLocation == 'Malaysia' || eventLocation == 'malaysia' ) {
-    eventPage = 'my';
+    // Do nothing
+    // eventPage = 'my';
   } else if (eventLocation == 'Indonesia' || eventLocation == 'indonesia') {
            eventPage = 'id';
   } else if (eventLocation == 'Thailand' || eventLocation == 'thailand') {
-    eventPage = 'th';
+    // Do nothing
+    // eventPage = 'th';
   }
   res.render(`pages/index-${eventPage}`, {
     title: eventLocation,
