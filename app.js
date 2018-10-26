@@ -78,7 +78,8 @@ app.get('/event/:location', (req, res, next) => {
     // Do nothing
     // eventPage = 'my';
   } else if (eventLocation == 'Indonesia' || eventLocation == 'indonesia') {
-           eventPage = 'id';
+    // Do nothing
+    // eventPage = 'id';
   } else if (eventLocation == 'Thailand' || eventLocation == 'thailand') {
     // Do nothing
     // eventPage = 'th';
